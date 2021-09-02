@@ -1,6 +1,9 @@
 # NetworkAPI-V1
 This is a network API that simplifies methods and can control the network through an API.
 
+# Player
+Mit dem "NetworkPlayer" ist das Coin-Management usw möglich. Den "NetworkPlayer" kann man mit der Abfrage "final INetworkPlayer<?> iNetworkPlayer = NetworkAPI.getInstance().getiNetworkPlayerCache().getINetworkPlayer(playerLoginEvent.getPlayer().getName());" abfragen.
+
 # Database
 MongoDB - Installation: 
 MongoDB - 2021 (Debian 10)
