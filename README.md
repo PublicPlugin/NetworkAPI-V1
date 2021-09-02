@@ -3,16 +3,6 @@ This is a network API that simplifies methods and can control the network throug
 
 # Database
 MongoDB - Installation: 
-
-  __  __                         _____  ____  
- |  \/  |                       |  __ \|  _ \ 
- | \  / | ___  _ __   __ _  ___ | |  | | |_) |
- | |\/| |/ _ \| '_ \ / _` |/ _ \| |  | |  _ < 
- | |  | | (_) | | | | (_| | (_) | |__| | |_) |
- |_|  |_|\___/|_| |_|\__, |\___/|_____/|____/ 
-                      __/ |                   
-                     |___/                    
-------------------------------------------------
 MongoDB - 2021 (Debian 10)
 
 1. Installation:
@@ -39,5 +29,5 @@ MongoDB - 2021 (Debian 10)
  - nano /etc/mongod.conf
  
 3. Konfiguration ändern:
- - # bei 'security' entfernen
+ - "#" bei 'security' entfernen
  - Darunter 'authorization: "enabled"' hinzufügen ('' nicht beachten)
