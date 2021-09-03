@@ -6,6 +6,16 @@ An "own" event system is integrated in the API.
 - This means that (in Spigot) you no longer need an "implements listener" and an "@EventHandler, public void handle(PostLoginEvent event) {}" but simply: "((SpigotEventManager) NetworkAPI.getInstance().getEvents().getManager())..register(PlayerLoginEvent.class, event -> {));". In this method you can do all the things you could do with the normal listener!
 - For bungeecord, unfortunately, the whole thing looks a little different. For Bungeecord you still need "implements listener" and "@EventHandler, public void handle(PostLoginEvent event) {}" but registering listeners has become easy. For this you simply do: "((ProxiedEventManager) NetworkAPI.getInstance().getEvents().getManager()).registerListener(this);"
 
+# Cloud
+In der NetworkAPI-v1 ist ein Cloud-Simplifier für CloudNet-v2 integriert. Das heißt Methoden wie den ServerState/Wartungen zu ändern sind einfacher. Oder auch die CloudPlayer-Abfrage ist einfacher und vieles mehr. Beispiele: 
+- CloudPlayer-UUID: CloudSimplifier.getInstance().getIPlayerManager().getCloudPlayer(uuid);
+- CloudPlayer-NAME: CloudSimplifier.getInstance().getIPlayerManager().getCloudPlayer(name);
+- OfflinePlayer-UUID: CloudSimplifier.getInstance().getIPlayerManager().getOfflinePlayer(uuid);
+- OfflinePlayer-NAME: CloudSimplifier.getInstance().getIPlayerManager().getOfflinePlayer(name);
+- Maintenance-Togge (for current-group): CloudSimplifier.getInstance().getIServiceManager().changeMaintenance( true / fale );
+- Maintenance-Togge (for extra group ): CloudSimplifier.getInstance().getIServiceManager().changeMaintenance( true / fale , GROUPNAME );
+- Get cached CloudPlayers from the current server: CloudSimplifier.getInstance().getIServiceManager().getCachedCloudPlayers(); - it returns a map with a UUID and the CloudPlayer!
+
 # Player
 Coin management etc. is possible with the "NetworkPlayer". The "NetworkPlayer" can be queried with the query "final INetworkPlayer<?> iNetworkPlayer = NetworkAPI.getInstance().getiNetworkPlayerCache().getINetworkPlayer(playerLoginEvent.getPlayer().getName());". Example: iNetworkPlayer.getCoin();
 
