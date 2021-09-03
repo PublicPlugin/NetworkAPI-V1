@@ -24,32 +24,53 @@ package de.golgolex.network.api.api.listener;
 ===========================================================================================================================
 */
 
+import de.dytanic.cloudnetcore.api.event.network.CloudInitEvent;
 import de.golgolex.network.api.api.NetworkAPI;
+import de.golgolex.network.api.api.events.EventState;
+import de.golgolex.network.api.api.events.Events;
+import de.golgolex.network.api.api.events.spigot.SpigotEventManager;
+import de.golgolex.network.api.api.events.spigot.event.NetworkPlayerJoinEvent;
 import de.golgolex.network.api.api.object.user.NetworkPlayer;
 import de.golgolex.network.api.api.object.user.INetworkPlayer;
-import de.golgolex.network.api.api.object.user.NetworkPlayerDataProperty;
 import de.golgolex.network.api.api.utils.BukkitRunTaskHelper;
-import de.golgolex.network.api.database.mongod.MongoPlayer;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import de.golgolex.network.api.cloud.CloudSimplifier;
+import de.golgolex.network.api.cloud.manager.IPlayerManager;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class BukkitConnectionListener implements Listener {
+public class BukkitConnectionListener {
 
-    @EventHandler
-    public void handle(final PlayerLoginEvent playerLoginEvent) {
+    private final Events<?> events;
+    private final SpigotEventManager spigotEventManager;
 
-        if (NetworkAPI.getInstance().getiNetworkPlayerCache().getINetworkPlayer(playerLoginEvent.getPlayer().getName()) == null) {
-            NetworkAPI.getInstance().getiNetworkPlayerCache().registerNetworkPlayer(new NetworkPlayer(playerLoginEvent.getPlayer().getName(), playerLoginEvent.getPlayer().getUniqueId()));
-        }
+    public BukkitConnectionListener() {
+        this.events = NetworkAPI.getInstance().getEvents();
+        this.spigotEventManager = (SpigotEventManager) events.getManager();
+        registerLogin();
+        registerQuit();
+    }
 
-        BukkitRunTaskHelper.runDelayAsync(() -> {
-            final INetworkPlayer<?> iNetworkPlayer = NetworkAPI.getInstance().getiNetworkPlayerCache().getINetworkPlayer(playerLoginEvent.getPlayer().getName());
-            final MongoPlayer mongoPlayer = NetworkAPI.getInstance().getNetworkPlayerMongoPlayer();
-            iNetworkPlayer.setCoins(mongoPlayer.searchPlayer(iNetworkPlayer.getUniqueId()).getInteger(NetworkPlayerDataProperty.COINS.name()));
-            iNetworkPlayer.setNotify(true);
-            iNetworkPlayer.setAutoGG(false);
-        }, 1);
+    public void registerLogin() {
+        this.spigotEventManager.register(PlayerLoginEvent.class, event -> {
+            if (NetworkAPI.getInstance().getiNetworkPlayerCache().getINetworkPlayer(event.getPlayer().getName()) == null) {
+                NetworkAPI.getInstance().getiNetworkPlayerCache().registerNetworkPlayer(new NetworkPlayer(event.getPlayer().getName(),
+                        event.getPlayer().getUniqueId()));
+            }
+
+            BukkitRunTaskHelper.runDelayAsync(() -> {
+                final INetworkPlayer<?> iNetworkPlayer = NetworkAPI.getInstance().getiNetworkPlayerCache().getINetworkPlayer(event.getPlayer().getName());
+                iNetworkPlayer.fetchData();
+                this.spigotEventManager.call(new NetworkPlayerJoinEvent(iNetworkPlayer, EventState.SUCCESS));
+            }, 0);
+        });
 
     }
+
+    public void registerQuit() {
+        this.spigotEventManager.register(PlayerQuitEvent.class, event -> {
+            final INetworkPlayer<?> iNetworkPlayer = NetworkAPI.getInstance().getiNetworkPlayerCache().getINetworkPlayer(event.getPlayer().getName());
+            NetworkAPI.getInstance().getiNetworkPlayerCache().unregisterNetworkPlayer(iNetworkPlayer);
+        });
+    }
+
 }

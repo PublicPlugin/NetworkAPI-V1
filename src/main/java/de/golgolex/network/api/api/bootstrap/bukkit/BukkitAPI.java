@@ -25,13 +25,19 @@ package de.golgolex.network.api.api.bootstrap.bukkit;
 */
 
 import de.golgolex.network.api.api.NetworkAPI;
+import de.golgolex.network.api.api.events.Events;
+import de.golgolex.network.api.api.events.spigot.SpigotEventManager;
+import de.golgolex.network.api.api.listener.BukkitConnectionListener;
 import org.bukkit.plugin.Plugin;
 
 public class BukkitAPI extends NetworkAPI {
     private final Plugin plugin;
 
     public BukkitAPI(Plugin plugin) {
+        super(new SpigotEventManager(plugin));
         this.plugin = plugin;
+
+        new BukkitConnectionListener();
     }
 
     public Plugin getPlugin() {

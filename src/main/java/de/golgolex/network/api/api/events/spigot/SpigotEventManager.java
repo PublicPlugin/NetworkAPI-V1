@@ -1,10 +1,10 @@
-package de.golgolex.network.api.database;
+package de.golgolex.network.api.api.events.spigot;
 
 /*
 ===========================================================================================================================
 # 
 # Copyright (c) 2021 Pascal Kurz
-# Class created at 02.09.2021, 00:17
+# Class created at 03.09.2021, 14:16
 # Class created by: Pascal
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
@@ -24,29 +24,39 @@ package de.golgolex.network.api.database;
 ===========================================================================================================================
 */
 
-import de.golgolex.network.api.api.NetworkAPI;
-import de.golgolex.network.api.database.mongod.IMongoConnector;
-import de.golgolex.network.api.database.mongod.IMongoFetcher;
-import de.golgolex.network.api.database.mongod.MongoConnector;
-import de.golgolex.network.api.database.mongod.SimpleMongoFetcher;
+import de.golgolex.network.api.api.events.Events;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
+import org.jsoup.select.Evaluator;
 
-public abstract class DatabaseAPI {
+import java.util.function.Consumer;
 
-    private static volatile DatabaseAPI service;
+public class SpigotEventManager implements Events {
 
-    protected DatabaseAPI() {
-        service = this;
+    private final Plugin plugin;
+
+    public SpigotEventManager(Plugin plugin) {
+        this.plugin = plugin;
     }
 
-    public IMongoFetcher getIMongoFetcher(String collectionName) {
-        return new SimpleMongoFetcher(NetworkAPI.getInstance().getNetworkPlayerMongoConnector().getMongoDatabase().getCollection(collectionName));
+    public void call(Event event) {
+        this.plugin.getServer().getPluginManager().callEvent(event);
     }
 
-    public IMongoConnector getIMongoConnector() {
-        return new MongoConnector();
+    public <T extends Event> Listener register(Class<T> clazz, Consumer<T> consumer) {
+        Listener listener = new Listener() {
+        };
+        this.plugin.getServer().getPluginManager().registerEvent(clazz, listener, EventPriority.NORMAL, (l, use) -> {
+            if (clazz.isInstance(use)) consumer.accept((T) use);
+        }, this.plugin, false);
+        return listener;
     }
 
-    public static DatabaseAPI getService() {
-        return service;
+    @Override
+    public Object getManager() {
+        return this;
     }
+
 }

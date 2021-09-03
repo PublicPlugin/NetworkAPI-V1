@@ -25,13 +25,18 @@ package de.golgolex.network.api.api.bootstrap.bungeecord;
 */
 
 import de.golgolex.network.api.api.NetworkAPI;
+import de.golgolex.network.api.api.events.Events;
+import de.golgolex.network.api.api.events.bungeecord.ProxiedEventManager;
+import de.golgolex.network.api.api.listener.ProxiedConnectionListener;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class ProxyAPI extends NetworkAPI {
     private final Plugin plugin;
 
     public ProxyAPI(Plugin plugin) {
+        super(new ProxiedEventManager(plugin));
         this.plugin = plugin;
+        new ProxiedConnectionListener();
     }
 
     public Plugin getPlugin() {

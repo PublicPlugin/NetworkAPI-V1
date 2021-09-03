@@ -1,10 +1,10 @@
-package de.golgolex.network.api.database;
+package de.golgolex.network.api.database.mongod;
 
 /*
 ===========================================================================================================================
 # 
 # Copyright (c) 2021 Pascal Kurz
-# Class created at 02.09.2021, 00:17
+# Class created at 03.09.2021, 14:42
 # Class created by: Pascal
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
@@ -24,29 +24,18 @@ package de.golgolex.network.api.database;
 ===========================================================================================================================
 */
 
-import de.golgolex.network.api.api.NetworkAPI;
-import de.golgolex.network.api.database.mongod.IMongoConnector;
-import de.golgolex.network.api.database.mongod.IMongoFetcher;
-import de.golgolex.network.api.database.mongod.MongoConnector;
-import de.golgolex.network.api.database.mongod.SimpleMongoFetcher;
+import org.bson.Document;
 
-public abstract class DatabaseAPI {
+import java.util.UUID;
 
-    private static volatile DatabaseAPI service;
+public interface IMongoFetcher {
 
-    protected DatabaseAPI() {
-        service = this;
-    }
+    void updateDocument(UUID uuid, Document document);
+    void updateDocument(String name, Document document);
 
-    public IMongoFetcher getIMongoFetcher(String collectionName) {
-        return new SimpleMongoFetcher(NetworkAPI.getInstance().getNetworkPlayerMongoConnector().getMongoDatabase().getCollection(collectionName));
-    }
+    Document searchPlayer(UUID uuid);
+    Document searchPlayer(String username);
 
-    public IMongoConnector getIMongoConnector() {
-        return new MongoConnector();
-    }
-
-    public static DatabaseAPI getService() {
-        return service;
-    }
+    void updatePlayer(final UUID uuid, final String key, final Object object);
+    void updatePlayer(final String username, final String key, final Object object);
 }

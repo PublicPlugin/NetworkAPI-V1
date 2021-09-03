@@ -30,38 +30,45 @@ import org.bson.Document;
 ===========================================================================================================================
 */
 
-public class MongoConnector {
+public class MongoConnector implements IMongoConnector {
 
     public MongoClient mongoClient;
     private MongoDatabase mongoDatabase;
     private MongoCollection<Document> collection;
 
+    @Override
     public void connect(String domain, String password, String database, String collectionName){
         this.mongoClient = MongoClients.create("mongodb://root:" + password +"@" + domain +":27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false");
         this.mongoDatabase = this.mongoClient.getDatabase(database);
         this.collection = this.mongoDatabase.getCollection(collectionName);
     }
 
+    @Override
     public MongoClient getMongoClient() {
         return mongoClient;
     }
 
+    @Override
     public MongoCollection<Document> getCollection() {
         return collection;
     }
 
+    @Override
     public MongoDatabase getMongoDatabase() {
         return mongoDatabase;
     }
 
+    @Override
     public void setCollection(MongoCollection<Document> collection) {
         this.collection = collection;
     }
 
+    @Override
     public void setMongoClient(MongoClient mongoClient) {
         this.mongoClient = mongoClient;
     }
 
+    @Override
     public void setMongoDatabase(MongoDatabase mongoDatabase) {
         this.mongoDatabase = mongoDatabase;
     }

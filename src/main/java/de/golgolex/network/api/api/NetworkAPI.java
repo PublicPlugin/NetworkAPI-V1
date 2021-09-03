@@ -24,28 +24,39 @@ package de.golgolex.network.api.api;
 ===========================================================================================================================
 */
 
+import de.golgolex.network.api.api.events.Events;
 import de.golgolex.network.api.api.object.user.NetworkPlayerCache;
 import de.golgolex.network.api.api.object.user.INetworkPlayerCache;
+import de.golgolex.network.api.database.mongod.IMongoConnector;
+import de.golgolex.network.api.database.mongod.IMongoFetcher;
 import de.golgolex.network.api.database.mongod.MongoConnector;
-import de.golgolex.network.api.database.mongod.MongoPlayer;
+import de.golgolex.network.api.database.mongod.SimpleMongoFetcher;
 import de.golgolex.network.api.api.bootstrap.bukkit.BukkitAPI;
 import de.golgolex.network.api.api.bootstrap.bungeecord.ProxyAPI;
 import de.golgolex.network.api.database.DatabaseAPI;
+
+import javax.xml.crypto.Data;
 
 public abstract class NetworkAPI {
 
     private static NetworkAPI instance;
 
     protected final INetworkPlayerCache iNetworkPlayerCache;
-    protected final MongoConnector networkPlayerMongoConnector;
-    protected final MongoPlayer networkPlayerMongoPlayer;
+    protected final IMongoConnector networkPlayerMongoConnector;
+    protected final IMongoFetcher networkPlayerMongoPlayer;
+    protected final Events<?> events;
 
-    protected NetworkAPI() {
+    protected NetworkAPI(Events<?> events) {
         instance = this;
         this.iNetworkPlayerCache = new NetworkPlayerCache();
-        this.networkPlayerMongoConnector = DatabaseAPI.getService().getMongoConnector();
+        this.networkPlayerMongoConnector = DatabaseAPI.getService().getIMongoConnector();
         this.networkPlayerMongoConnector.connect("", "", "", "networkPlayers");
-        this.networkPlayerMongoPlayer = DatabaseAPI.getService().getMongoPlayer("networkPlayers");
+        this.networkPlayerMongoPlayer = DatabaseAPI.getService().getIMongoFetcher("networkPlayers");
+        this.events = events;
+    }
+
+    public Events<?> getEvents() {
+        return events;
     }
 
     public BukkitAPI getBukkitAPI() {
@@ -56,11 +67,11 @@ public abstract class NetworkAPI {
         return (ProxyAPI) this;
     }
 
-    public MongoConnector getNetworkPlayerMongoConnector() {
+    public IMongoConnector getNetworkPlayerMongoConnector() {
         return networkPlayerMongoConnector;
     }
 
-    public MongoPlayer getNetworkPlayerMongoPlayer() {
+    public IMongoFetcher getNetworkPlayerMongoPlayer() {
         return networkPlayerMongoPlayer;
     }
 

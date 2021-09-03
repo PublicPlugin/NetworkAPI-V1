@@ -1,10 +1,10 @@
-package de.golgolex.network.api.database;
+package de.golgolex.network.api.api.events;
 
 /*
 ===========================================================================================================================
 # 
 # Copyright (c) 2021 Pascal Kurz
-# Class created at 02.09.2021, 00:17
+# Class created at 03.09.2021, 14:33
 # Class created by: Pascal
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
@@ -24,29 +24,8 @@ package de.golgolex.network.api.database;
 ===========================================================================================================================
 */
 
-import de.golgolex.network.api.api.NetworkAPI;
-import de.golgolex.network.api.database.mongod.IMongoConnector;
-import de.golgolex.network.api.database.mongod.IMongoFetcher;
-import de.golgolex.network.api.database.mongod.MongoConnector;
-import de.golgolex.network.api.database.mongod.SimpleMongoFetcher;
+public interface Events<T> {
 
-public abstract class DatabaseAPI {
+    T getManager();
 
-    private static volatile DatabaseAPI service;
-
-    protected DatabaseAPI() {
-        service = this;
-    }
-
-    public IMongoFetcher getIMongoFetcher(String collectionName) {
-        return new SimpleMongoFetcher(NetworkAPI.getInstance().getNetworkPlayerMongoConnector().getMongoDatabase().getCollection(collectionName));
-    }
-
-    public IMongoConnector getIMongoConnector() {
-        return new MongoConnector();
-    }
-
-    public static DatabaseAPI getService() {
-        return service;
-    }
 }

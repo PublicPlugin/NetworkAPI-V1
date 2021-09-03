@@ -1,10 +1,10 @@
-package de.golgolex.network.api.database;
+package de.golgolex.network.api.api.events.bungeecord;
 
 /*
 ===========================================================================================================================
 # 
 # Copyright (c) 2021 Pascal Kurz
-# Class created at 02.09.2021, 00:17
+# Class created at 03.09.2021, 14:18
 # Class created by: Pascal
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
@@ -24,29 +24,29 @@ package de.golgolex.network.api.database;
 ===========================================================================================================================
 */
 
-import de.golgolex.network.api.api.NetworkAPI;
-import de.golgolex.network.api.database.mongod.IMongoConnector;
-import de.golgolex.network.api.database.mongod.IMongoFetcher;
-import de.golgolex.network.api.database.mongod.MongoConnector;
-import de.golgolex.network.api.database.mongod.SimpleMongoFetcher;
+import de.golgolex.network.api.api.events.Events;
+import net.md_5.bungee.api.plugin.Event;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.api.plugin.Plugin;
 
-public abstract class DatabaseAPI {
+public class ProxiedEventManager implements Events {
 
-    private static volatile DatabaseAPI service;
+    private final Plugin plugin;
 
-    protected DatabaseAPI() {
-        service = this;
+    public ProxiedEventManager(Plugin plugin) {
+        this.plugin = plugin;
     }
 
-    public IMongoFetcher getIMongoFetcher(String collectionName) {
-        return new SimpleMongoFetcher(NetworkAPI.getInstance().getNetworkPlayerMongoConnector().getMongoDatabase().getCollection(collectionName));
+    public void call(Event event) {
+        this.plugin.getProxy().getPluginManager().callEvent(event);
     }
 
-    public IMongoConnector getIMongoConnector() {
-        return new MongoConnector();
+    public void registerListener(Listener listener) {
+        this.plugin.getProxy().getPluginManager().registerListener(this.plugin, listener);
     }
 
-    public static DatabaseAPI getService() {
-        return service;
+    @Override
+    public Object getManager() {
+        return this;
     }
 }

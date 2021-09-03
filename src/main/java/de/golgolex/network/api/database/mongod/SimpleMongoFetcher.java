@@ -31,36 +31,42 @@ import java.util.UUID;
 ===========================================================================================================================
 */
 
-public class MongoPlayer {
+public class SimpleMongoFetcher implements IMongoFetcher {
 
     private final MongoCollection<Document> collection;
 
-    public MongoPlayer(MongoCollection<Document> collection) {
+    public SimpleMongoFetcher(MongoCollection<Document> collection) {
         this.collection = collection;
     }
 
+    @Override
     public void updateDocument(UUID uuid, Document document) {
         this.collection.replaceOne(Filters.eq(NetworkPlayerDataProperty.UUID.name(), uuid), document);
     }
 
+    @Override
     public void updateDocument(String name, Document document) {
         this.collection.replaceOne(Filters.eq(NetworkPlayerDataProperty.NAME.name(), name), document);
     }
 
+    @Override
     public Document searchPlayer(UUID uuid) {
         return this.collection.find().filter(Filters.eq(NetworkPlayerDataProperty.UUID.name(), uuid)).first();
     }
 
+    @Override
     public Document searchPlayer(String username) {
         return this.collection.find().filter(Filters.eq(NetworkPlayerDataProperty.NAME.name(), username)).first();
     }
 
+    @Override
     public void updatePlayer(final UUID uuid, final String key, final Object object) {
         Document update = new Document(key, object);
         Document updater = new Document("$set", update);
         this.collection.updateOne(Filters.eq(NetworkPlayerDataProperty.UUID.name(), uuid), updater);
     }
 
+    @Override
     public void updatePlayer(final String username, final String key, final Object object) {
         Document update = new Document(key, object);
         Document updater = new Document("$set", update);
