@@ -12,8 +12,8 @@ A cloud simplifier for CloudNet-v2 is integrated in NetworkAPI-v1. This means th
 - CloudPlayer-NAME: CloudSimplifier.getInstance().getIPlayerManager().getCloudPlayer(name);
 - OfflinePlayer-UUID: CloudSimplifier.getInstance().getIPlayerManager().getOfflinePlayer(uuid);
 - OfflinePlayer-NAME: CloudSimplifier.getInstance().getIPlayerManager().getOfflinePlayer(name);
-- Maintenance-Togge (for current-group): CloudSimplifier.getInstance().getIServiceManager().changeMaintenance( true / fale );
-- Maintenance-Togge (for extra group ): CloudSimplifier.getInstance().getIServiceManager().changeMaintenance( true / fale , GROUPNAME );
+- Maintenance-Togge (for current-group): CloudSimplifier.getInstance().getIServiceManager().changeMaintenance( true / false );
+- Maintenance-Togge (for extra group ): CloudSimplifier.getInstance().getIServiceManager().changeMaintenance( true / false , GROUPNAME );
 - Get cached CloudPlayers from the current server: CloudSimplifier.getInstance().getIServiceManager().getCachedCloudPlayers(); - it returns a map with a UUID and the CloudPlayer!
 
 # Player
