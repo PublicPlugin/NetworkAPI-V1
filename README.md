@@ -2,7 +2,9 @@
 This is a network API that simplifies methods and can control the network through an API.
 
 # Event
-An "own" event system is integrated in the API. This means that (in Spigot) you no longer need an "implements listener" and an "@EventHandler, public void handle(PostLoginEvent event) {}" but simply: "((SpigotEventManager) NetworkAPI.getInstance().getEvents().getManager())..register(PlayerLoginEvent.class, event -> {));". In this method you can do all the things you could do with the normal listener!
+An "own" event system is integrated in the API. 
+- This means that (in Spigot) you no longer need an "implements listener" and an "@EventHandler, public void handle(PostLoginEvent event) {}" but simply: "((SpigotEventManager) NetworkAPI.getInstance().getEvents().getManager())..register(PlayerLoginEvent.class, event -> {));". In this method you can do all the things you could do with the normal listener!
+- For bungeecord, unfortunately, the whole thing looks a little different. For Bungeecord you still need "implements listener" and "@EventHandler, public void handle(PostLoginEvent event) {}" but registering listeners has become easy. For this you simply do: "((ProxiedEventManager) NetworkAPI.getInstance().getEvents().getManager()).registerListener(this);"
 
 # Player
 Coin management etc. is possible with the "NetworkPlayer". The "NetworkPlayer" can be queried with the query "final INetworkPlayer<?> iNetworkPlayer = NetworkAPI.getInstance().getiNetworkPlayerCache().getINetworkPlayer(playerLoginEvent.getPlayer().getName());". Example: iNetworkPlayer.getCoin();
