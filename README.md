@@ -7,7 +7,7 @@ An "own" event system is integrated in the API.
 - For bungeecord, unfortunately, the whole thing looks a little different. For Bungeecord you still need "implements listener" and "@EventHandler, public void handle(PostLoginEvent event) {}" but registering listeners has become easy. For this you simply do: "((ProxiedEventManager) NetworkAPI.getInstance().getEvents().getManager()).registerListener(this);"
 
 # Cloud
-In der NetworkAPI-v1 ist ein Cloud-Simplifier für CloudNet-v2 integriert. Das heißt Methoden wie den ServerState/Wartungen zu ändern sind einfacher. Oder auch die CloudPlayer-Abfrage ist einfacher und vieles mehr. Beispiele: 
+A cloud simplifier for CloudNet-v2 is integrated in NetworkAPI-v1. This means that methods such as changing the server status/maintenance are easier. Or the CloudPlayer query is also easier and much more. Examples: 
 - CloudPlayer-UUID: CloudSimplifier.getInstance().getIPlayerManager().getCloudPlayer(uuid);
 - CloudPlayer-NAME: CloudSimplifier.getInstance().getIPlayerManager().getCloudPlayer(name);
 - OfflinePlayer-UUID: CloudSimplifier.getInstance().getIPlayerManager().getOfflinePlayer(uuid);
