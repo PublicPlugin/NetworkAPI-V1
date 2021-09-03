@@ -33,7 +33,7 @@ MongoDB - 2021 (Debian 10)
  - sudo apt-get update
  - sudo apt-get install -y mongodb-org
  
-2. Authentifikation aktivieren (Passwort):
+2. Activate authentication (password):
  - mongo
  - use admin
  - db.createUser(
@@ -49,6 +49,6 @@ MongoDB - 2021 (Debian 10)
 })
  - nano /etc/mongod.conf
  
-3. Konfiguration ändern:
- - "#" bei 'security' entfernen
- - Darunter 'authorization: "enabled"' hinzufügen ('' nicht beachten)
+3. Change configuration:
+ - Remove "#" from 'security
+ - Add 'authorization: "enabled"' below ('' disregard)
