@@ -20,7 +20,7 @@ A cloud simplifier for CloudNet-v2 is integrated in NetworkAPI-v1. This means th
 - Get cached CloudPlayers from the current server: CloudSimplifier.getInstance().getIServiceManager().getCachedCloudPlayers(); - it returns a map with a UUID and the CloudPlayer!
 
 # Player
-Coin management etc. is possible with the "NetworkPlayer". The "NetworkPlayer" can be queried with the query "final INetworkPlayer<?> iNetworkPlayer = NetworkAPI.getInstance().getiNetworkPlayerCache().getINetworkPlayer(playerLoginEvent.getPlayer().getName());". Example: iNetworkPlayer.getCoin();
+Coin management etc. is possible with the "NetworkPlayer". The "NetworkPlayer" can be queried with the query "final INetworkPlayer<?> iNetworkPlayer = NetworkAPI.getInstance().getiNetworkPlayerCache().getINetworkPlayer( NAME OR UUID );". Example: iNetworkPlayer.getCoin();
 
 # Database
 MongoDB - Installation: 
